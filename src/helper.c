@@ -1,4 +1,4 @@
-#include "helper.h"
+#include "../lib/helper.h"
 #define MAX_FILE 50
 typedef void (*a_mode)(char* matrix[MATRIX_ROWS][MATRIX_INFO]);
 

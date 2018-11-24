@@ -10,3 +10,14 @@
 1543060274 source:/home/simone/Asianodds_parser/helper.c
 	"helper.h"
 
+1543066643 source:/home/simone/Asianodds_parser/src/helper.c
+	"../lib/helper.h"
+
+1543065606 /home/simone/Asianodds_parser/lib/helper.h
+	<curl/curl.h>
+	"myhtml/api.h"
+	<getopt.h>
+
+1543066662 source:/home/simone/Asianodds_parser/src/main.c
+	"../lib/helper.h"
+
