@@ -104,8 +104,22 @@ void get_drops(char* matrix[MATRIX_ROWS][MATRIX_INFO])
     }
 }
 
-void parse(myhtml_tree_t* tree, asodds_t mode)
+void asodds_parse(asodds_t asodds)
 {
+    char* file = asodds_file(asodds);
+    res_html res = load_html(file);
+
+    //MyHTML init
+    myhtml_t* myhtml = myhtml_create();
+    myhtml_init(myhtml, MyHTML_OPTIONS_DEFAULT, 1, 0);
+
+    //init tree
+    myhtml_tree_t* tree = myhtml_tree_create();
+    myhtml_tree_init(tree, myhtml);
+
+    //parse html
+    myhtml_parse(tree, MyENCODING_UTF_8, res.html, res.size);
+
     myhtml_collection_t *collection = myhtml_get_nodes_by_attribute_value(tree, NULL, NULL, false, "class", strlen("class"), "main", strlen("main"), NULL);
     myhtml_collection_t *tds;
     if(collection && collection->list && collection->length)
@@ -124,7 +138,7 @@ void parse(myhtml_tree_t* tree, asodds_t mode)
 //            LINE;
         }
 //        print_matrix(MATRIX_ROWS, matches);
-        asodds_run(mode, matches);
+        asodds_run(asodds, matches);
         free_matrix(matches);
     }
 }

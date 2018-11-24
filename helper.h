@@ -42,7 +42,7 @@ void free_matrix(char* matrix[MATRIX_ROWS][MATRIX_INFO]);
 
 void get_drops(char* matrix[MATRIX_ROWS][MATRIX_INFO]);
 
-void parse(myhtml_tree_t* tree, asodds_t mode);
+void asodds_parse(asodds_t mode);
 
 void download(FILE* fp);
 

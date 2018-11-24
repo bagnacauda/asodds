@@ -1,8 +1,8 @@
 # depslib dependency file v1.0
-1543060245 source:/home/simone/Asianodds_parser/main.c
+1543065732 source:/home/simone/Asianodds_parser/main.c
 	"helper.h"
 
-1543060112 /home/simone/Asianodds_parser/helper.h
+1543065606 /home/simone/Asianodds_parser/helper.h
 	<curl/curl.h>
 	"myhtml/api.h"
 	<getopt.h>
