@@ -146,18 +146,15 @@ void asodds_parse(asodds_t asodds)
     {
         char* matches[MATRIX_ROWS][MATRIX_INFO];
         clean_matrix(matches);
-        //print_matrix(MATRIX_ROWS, matches);
         for(int i=OFFSET; i< collection->length; i++)
         {
             tds = myhtml_get_nodes_by_tag_id_in_scope(tree, NULL, collection->list[i], MyHTML_TAG_TD, NULL);
             for(int j=0; j< tds->length; j++)
             {
                 fill_matrix(matches[i-OFFSET], tree, tds->list[j], j);
-//                print_tree(tree, tds->list[j]);
             }
-//            LINE;
         }
-//        print_matrix(MATRIX_ROWS, matches);
+        res_html_clean(res);
         asodds_run(asodds, matches);
         free_matrix(matches);
     }
@@ -287,10 +284,8 @@ asodds_t asodds_init(int argc, char** argv)
             printf("====ASIANODDS PARSER====\n\nUsage: %s mode\n\nModes\n* --print:\tprints all matches found\n* --drops:\tprints only matches with a drop in spread\n", argv[0]);
             exit(0);
         case 'o':
-
-            temp = malloc(sizeof(char)*strlen(optarg));
-            strcpy(temp, optarg);
-            mode->file = temp;
+            mode->file = malloc(sizeof(char)*strlen(optarg));
+            strcpy(mode->file, optarg);
             break;
         case 'p':
             mode->mode = &print_matrix;
@@ -299,8 +294,8 @@ asodds_t asodds_init(int argc, char** argv)
             printf(CREDITS);
             exit(0);
             break;
-        //No parameter
         case '?':
+            //No parameter
             printf("No argument\n");
             exit(-1);
         default:
@@ -317,11 +312,17 @@ asodds_t asodds_init(int argc, char** argv)
     return mode;
 }
 
+void res_html_clean(res_html_t res){
+    free(res->html);
+    free(res);
+}
+
 char* asodds_file(asodds_t asodds){
     return asodds->file;
 }
 
 void asodds_clean(asodds_t asodds){
+    free(asodds->file);
     free(asodds);
 }
 
