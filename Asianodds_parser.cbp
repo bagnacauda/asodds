@@ -36,12 +36,11 @@
 			<Add library="libmyhtml_static.a" />
 			<Add library="pthread" />
 		</Linker>
-		<Unit filename="gay.html" />
-		<Unit filename="helper.c">
+		<Unit filename="lib/helper.h" />
+		<Unit filename="src/helper.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="helper.h" />
-		<Unit filename="main.c">
+		<Unit filename="src/main.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Extensions>

@@ -1,5 +1,18 @@
 #include "../lib/helper.h"
+
 #define MAX_FILE 50
+#define FILENAME "/tmp/asianodds.html"
+#define CREDITS "\tAsianodds parser version 0.1 alpha\n\tCredits: SimonDottor (code)\n"
+#define H_ARR_LEN 11
+#define A_ARR_LEN 8
+#define LINE printf("\n")
+#define CELL_SIZE 50
+#define OFFSET 15
+
+enum HOME_ARR { TIME, H_TEAM, H_SPREAD_NOW, H_ODD_NOW, H_SPREAD_OLD, H_ODD_OLD, TOT_NOW, TOT_OLD, H_TEXT_OVR, ODD_OVR_NOW, ODD_OVR_OLD};
+enum AWAY_ARR { A_TEAM, A_SPREAD_NOW, A_ODD_NOW, A_SPREAD_OLD, A_ODD_OLD, A_TEXT_UND, ODD_UND_NOW, ODD_UND_OLD};
+
+
 typedef void (*a_mode)(char* matrix[MATRIX_ROWS][MATRIX_INFO]);
 
 struct asodds
@@ -7,6 +20,13 @@ struct asodds
     a_mode mode;
     char* file;
 };
+
+struct res_html
+{
+    char* html;
+    size_t size;
+};
+
 
 void credits()
 {
@@ -107,7 +127,7 @@ void get_drops(char* matrix[MATRIX_ROWS][MATRIX_INFO])
 void asodds_parse(asodds_t asodds)
 {
     char* file = asodds_file(asodds);
-    res_html res = load_html(file);
+    res_html_t res = load_html(file);
 
     //MyHTML init
     myhtml_t* myhtml = myhtml_create();
@@ -118,7 +138,7 @@ void asodds_parse(asodds_t asodds)
     myhtml_tree_init(tree, myhtml);
 
     //parse html
-    myhtml_parse(tree, MyENCODING_UTF_8, res.html, res.size);
+    myhtml_parse(tree, MyENCODING_UTF_8, res->html, res->size);
 
     myhtml_collection_t *collection = myhtml_get_nodes_by_attribute_value(tree, NULL, NULL, false, "class", strlen("class"), "main", strlen("main"), NULL);
     myhtml_collection_t *tds;
@@ -163,7 +183,7 @@ void download(FILE* fp)
 
 }
 
-res_html load_html(char* file)
+res_html_t load_html(char* file)
 {
     FILE* fh = NULL;
     if(file)
@@ -219,7 +239,10 @@ res_html load_html(char* file)
         exit(-5);
     }
 
-    res_html ret= {html, size};
+    res_html_t ret = malloc(sizeof(struct res_html));
+
+    ret->html = html;
+    ret->size = size;
 
     fclose(fh);
     return ret;
