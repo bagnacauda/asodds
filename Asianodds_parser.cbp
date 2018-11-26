@@ -11,7 +11,7 @@
 				<Option object_output="obj/Debug/" />
 				<Option type="1" />
 				<Option compiler="gcc" />
-				<Option parameters="--offline index.html --drops" />
+				<Option parameters="--offline index.html --print" />
 				<Compiler>
 					<Add option="-g" />
 				</Compiler>

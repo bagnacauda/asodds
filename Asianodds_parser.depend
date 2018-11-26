@@ -21,3 +21,14 @@
 1543139400 source:/home/simone/Asianodds_parser/src/main.c
 	"../lib/helper.h"
 
+1543145000 source:/home/simone/asodds/src/main.c
+	"../lib/helper.h"
+
+1543149623 /home/simone/asodds/lib/helper.h
+	<curl/curl.h>
+	"myhtml/api.h"
+	<getopt.h>
+
+1543151194 source:/home/simone/asodds/src/helper.c
+	"../lib/helper.h"
+

@@ -2,15 +2,13 @@
 
 #define MAX_FILE 50
 #define FILENAME "/tmp/asianodds.html"
-#define CREDITS "\tAsianodds parser version 0.1 alpha\n\tCredits: SimonDottor (code)\n"
-#define H_ARR_LEN 11
-#define A_ARR_LEN 8
+#define CREDITS "Asianodds parser version 0.1 alpha\nCredits: SimonDottor (code)\n"
 #define LINE printf("\n")
 #define CELL_SIZE 50
 #define OFFSET 15
 
-enum HOME_ARR { TIME, H_TEAM, H_SPREAD_NOW, H_ODD_NOW, H_SPREAD_OLD, H_ODD_OLD, TOT_NOW, TOT_OLD, H_TEXT_OVR, ODD_OVR_NOW, ODD_OVR_OLD};
-enum AWAY_ARR { A_TEAM, A_SPREAD_NOW, A_ODD_NOW, A_SPREAD_OLD, A_ODD_OLD, A_TEXT_UND, ODD_UND_NOW, ODD_UND_OLD};
+enum HOME_ARR { HOME_TIME, HOME_TEAM, HOME_SPREAD_NOW, HOME_ODD_NOW, HOME_SPREAD_OLD, HOME_ODD_OLD, HOME_TOT_NOW, HOME_TOT_OLD, HOME_TEXT_OVR, HOME_ODD_OVR_NOW, HOME_ODD_OVR_OLD, HOME_ARR_LEN};
+enum AWAY_ARR { AWAY_TEAM, AWAY_SPREAD_NOW, AWAY_ODD_NOW, AWAY_SPREAD_OLD, AWAY_ODD_OLD, AWAY_TEXT_UND, AWAY_ODD_UND_NOW, AWAY_ODD_UND_OLD, AWAY_ARR_LEN};
 
 
 typedef void (*a_mode)(char* matrix[MATRIX_ROWS][MATRIX_INFO]);
@@ -50,7 +48,7 @@ void print_matrix(char* matches[MATRIX_ROWS][MATRIX_INFO])
 {
     for(int i=0; i < MATRIX_ROWS; i++)
     {
-        for(int j=0; j < (i%2?A_ARR_LEN:H_ARR_LEN); j++)
+        for(int j=0; j < (i%2?AWAY_ARR_LEN:HOME_ARR_LEN); j++)
         {
             printf("%s\t", matches[i][j]);
         }
@@ -67,6 +65,16 @@ void print_array(int len, char* matches[MATRIX_INFO])
         printf("%s\t", matches[i]);
     }
     LINE;
+}
+
+void print_match(char* home[], char* away[]){
+    printf("%s: %-25.25s %-25.25s %-4s %-5s\n", home[HOME_TIME], home[HOME_TEAM], away[AWAY_TEAM], home[HOME_TOT_NOW], home[HOME_ODD_OVR_NOW]);
+}
+
+void print_matches(char* matches[MATRIX_ROWS][MATRIX_INFO]){
+    for(int i =0; i<MATRIX_ROWS; i+=2){
+        print_match(matches[i], matches[i+1]);
+    }
 }
 
 void fill_matrix(char* matches[], myhtml_tree_t* tree, myhtml_tree_node_t* node, int i)
@@ -115,10 +123,9 @@ void get_drops(char* matrix[MATRIX_ROWS][MATRIX_INFO])
 {
     for(int i=0; i < MATRIX_ROWS; i+=2)
     {
-        if(atof(matrix[i][TOT_NOW]) < atof(matrix[i][TOT_OLD]))
+        if(atof(matrix[i][HOME_TOT_NOW]) < atof(matrix[i][HOME_TOT_OLD]))
         {
-            print_array(H_ARR_LEN, matrix[i]);
-            print_array(A_ARR_LEN, matrix[i+1]);
+            print_match(matrix[i], matrix[i+1]);
             LINE;
         }
     }
@@ -251,7 +258,7 @@ asodds_t asodds_init(int argc, char** argv)
 
     if(argc < 2)
     {
-        printf("USAGE: %s mode", argv[0]);
+        printf("USAGE: %s mode\n", argv[0]);
         exit(-1);
     }
 
@@ -276,7 +283,6 @@ asodds_t asodds_init(int argc, char** argv)
         }
         switch(c)
         {
-            char* temp;
         case 'd':
             mode->mode = &get_drops;
             break;
@@ -288,7 +294,7 @@ asodds_t asodds_init(int argc, char** argv)
             strcpy(mode->file, optarg);
             break;
         case 'p':
-            mode->mode = &print_matrix;
+            mode->mode = &print_matches;
             break;
         case 'v':
             printf(CREDITS);
